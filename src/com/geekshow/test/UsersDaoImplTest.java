@@ -99,7 +99,7 @@ public class UsersDaoImplTest {
 	@Test
 	@Transactional
 	public void testSelectUserByNameUseCriteria(){
-		List<Users> list = this.usersDao.selectUserByNameUseCriteria("张三");
+		List<Users> list = this.usersDao.selectUserByNameUseCriteria("王五");
 		for (Users users : list) {
 			System.out.println(users);
 		}

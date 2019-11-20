@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.geekshow.dao.UsersDao;
@@ -65,7 +64,20 @@ public class UsersDaoImpl  implements UsersDao {
 	 */
 	@Override
 	public List<Users> selectUserByNameUseCriteria(String username) {
-		return null;
+		//CriteriaBuilder对象：创建一个CriteriaQuery,创建查询条件。
+		CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
+		//CriteriaQuery对象：执行查询的Criteria对象
+		//select  * from t_users
+		CriteriaQuery<Users> criteriaQuery = criteriaBuilder.createQuery(Users.class);
+		//获取要查询的实体类的对象
+		Root<Users> root = criteriaQuery.from(Users.class);
+		//封装查询条件
+		Predicate predicate = criteriaBuilder.equal(root.get("username"), username);
+		//select * from t_users where username = 张三
+		criteriaQuery.where(predicate);
+		//执行查询
+		TypedQuery<Users> typeQuery = this.entityManager.createQuery(criteriaQuery);
+		return typeQuery.getResultList();
 	}
 
 
